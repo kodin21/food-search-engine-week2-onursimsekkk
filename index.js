@@ -19,27 +19,42 @@ let foodArray = [];
 let favArray = [];
 let resultsArray = [];
 
+// Fetch Food Info
 async function loadFoodItems() {
   await fetch("https://jsonplaceholder.typicode.com/todos")
     .then((response) => response.json())
     .then((data) => {
       data.map((food) => {
         foodArray.push(food);
-        // push(food.forEach(item => ()))
       });
     });
 };
 
-searchInput.addEventListener("input", searchFuse);
 
+// Debounce
+const debounce = (func, wait) => {
+  let timeout;
 
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
+
+// Input Event
+searchInput.addEventListener("input", debounce(searchFuse, 800));
+// Fuse Function
 function searchFuse() {
   const fuseOptions = {keys: ["title"] };
   const fuse = new Fuse(foodArray, fuseOptions);
   const searchValue = fuse.search(searchInput.value);
-  // console.log(fuse.search("a"));
-  resultsArray = searchValue;
-  console.log(resultsArray);
+
+  resultsArray = searchValue.map(result => result.item);
   createCards(resultsArray);
 };
 
@@ -85,7 +100,6 @@ function favToggle() {
 
         favArray.forEach((food) => {
           if (food.id == selectedItem.id) {
-            console.log("eşleşti");
             deletedFavItem = food;
           }
         });
@@ -95,7 +109,6 @@ function favToggle() {
         localStorage.setItem("favArray", JSON.stringify(favArray));
       } else if (btn.className.includes("far")) {
         btn.classList = "fas fa-star myFavBtn p-2";
-        console.log("eklendi");
         favArray.push(selectedItem);
 
         localStorage.setItem("favArray", JSON.stringify(favArray));
