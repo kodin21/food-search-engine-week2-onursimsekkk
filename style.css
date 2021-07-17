@@ -56,11 +56,12 @@
 
 .foodCard {
   border: 1px solid darkblue;
+  background-color: aquamarine;
   display: inline-block;
-  width: 280px;
+  width: 600px;
   height: 100px;
   margin-bottom: 20px;
-  padding: 5px;
+  padding: 15px;
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
@@ -72,12 +73,14 @@
   background-color: #fff;
 }
 
-.favBtn {
-  width: 3rem;
-  height: 3rem;
+/* Fav Button */
+
+.myFavBtn {
+  background-color: aquamarine;
+  border-radius: 50%;
 }
 
-.borderEffect {
-  border: 2px solid darkblue;
+.myFavBtn-clicked {
   background-color: #fff;
+  border-radius: 50%;
 }
