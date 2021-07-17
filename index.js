@@ -17,6 +17,7 @@ fetch("https://jsonplaceholder.typicode.com/users/1")
 const foodArea = document.getElementById("food-box");
 let foodArray = [];
 let favArray = [];
+let resultsArray = [];
 
 async function loadFoodItems() {
   await fetch("https://jsonplaceholder.typicode.com/todos")
@@ -30,23 +31,23 @@ async function loadFoodItems() {
 };
 
 searchInput.addEventListener("input", searchFuse);
-const fuse = new Fuse(foodArray, { keys: ["title"] });
+
 
 function searchFuse() {
-  console.log(foodArray);
-
-  // const searchValue = fuse.search(searchInput.value);
-  // console.log(foodArray);
-  // foodArray = searchValue.items;
-  // createCards();
-  
+  const fuseOptions = {keys: ["title"] };
+  const fuse = new Fuse(foodArray, fuseOptions);
+  const searchValue = fuse.search(searchInput.value);
+  // console.log(fuse.search("a"));
+  resultsArray = searchValue;
+  console.log(resultsArray);
+  createCards(resultsArray);
 };
 
 // Food Card
-function createCards() {
+function createCards(resultsArray) {
   foodArea.innerHTML = "";
 
-  foodArray.forEach((food) => {
+  resultsArray.forEach((food) => {
     const foodCard = document.createElement("div");
 
     foodCard.innerHTML = food.title;
@@ -107,7 +108,7 @@ async function renderApp() {
   favArray = JSON.parse(localStorage.getItem("favArray")) || [];
   await loadFoodItems();
 
-  createCards();
+  createCards(foodArray);
 
   favToggle();
 }
