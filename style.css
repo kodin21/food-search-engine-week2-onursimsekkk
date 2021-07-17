@@ -67,9 +67,10 @@
   align-items: center;
 }
 
-/* .foodCard:focus {
-  border: 2px;
-} */
+.foodCard:focus {
+  border: 2px solid darkblue;
+  background-color: #fff;
+}
 
 .favBtn {
   width: 3rem;
