@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime'
 // const root = document.querySelector('#js-root');
 const user = document.getElementById('user-info');
 
@@ -12,67 +13,84 @@ fetch("https://jsonplaceholder.typicode.com/users/1").then(
   });
 
   const foodArea = document.getElementById('food-box');
+  let foodArray = [];
+  let favArray = [];
 
-  function loadFoodItems() {
-    fetch("https://jsonplaceholder.typicode.com/todos")
+  async function loadFoodItems() {
+    await fetch("https://jsonplaceholder.typicode.com/todos")
     .then(response => response.json())
     .then(data => {
-      data.forEach(food => {
-        const foodCard = document.createElement('div');
-        foodCard.innerHTML = food.title;
-        foodCard.className = "foodCard";
-        foodCard.setAttribute('tabIndex', food.id)
-
-        const favBtn = document.createElement('button');
-        favBtn.setAttribute('id', food.id);
-        favBtn.classList.add(
-          "favBtn",
-          "p-2",
-          "btn",
-          "btn-primary"
-        )
-        favBtn.textContent = "FAV";
-        foodCard.appendChild(favBtn);
-        foodArea.appendChild(foodCard);
+      data.map(food => {
+        // Food Card 
+        foodArray.push(food); 
       });
     });
   };
-
-  loadFoodItems();
-
   
-  // const foodBox = document.getElementsByClassName("food-box");
-  // const foodCard = document.querySelector('.foodCard');
-  // document.addEventListener('click', focusFoodCard);
-  // document.addEventListener('blur', leaveFoodCard);
+  function createCards() {
+    foodArray.forEach(food => {
+      const foodCard = document.createElement('div');
+      foodCard.innerHTML = food.title;
+      foodCard.className = "foodCard";
+      foodCard.setAttribute('tabIndex', food.id)
+      // food.completed ? foodCard.classList.add('bg-info') : ""; 
 
-  // Focus to card Function
-  // function focusFoodCard(e) {
-  //   if(e.target.className === "foodCard") {
-  //     e.target.classList.add("borderEffect", "bg-info");
-  //     // e.target.focus();
-  //     // setTimeout( focusOut(), 2000);
-  //     // const allCards = document.querySelectorAll("div.foodCard, .bg-info");
-  //     // var i;
-  //     // for (i = 0; i < allCards.length; i++) {
-  //     // allCards[i].classList.remove("borderEffect", "bg-info");
-  //     // }
-  //   }
-  // };
+      // Favorite Button
+      const favBtn = document.createElement('i');
+      favBtn.setAttribute('id', food.id);
+      favBtn.classList.add(
+        "far",
+        "fa-star",
+        "myFavBtn",
+        "p-2"
+      );
 
-  // function focusOut(e) {
-  //   e.target.classList.remove("borderEffect", "bg-info");
-  //   console.log("2 sn geçti")
-  // };
-  //  Focus Out function
-  // function leaveFoodCard(e) {
-  //   if(e.target.classList.contains("borderEffect")) {
-  //     e.target.classList.remove("borderEffect", "bg-info");
-  //   }
-  // };
+      foodCard.appendChild(favBtn);
+      foodArea.appendChild(foodCard);
+    })
+  };
 
-  // const searchInput = document.getElementById('searchInput');
+  function setAllFoodsNoFav() {
+    foodArray.forEach(food => {
+      food.completed = false;
+    }
+)};
 
-  // searchInput.addEventListener('focusin', (e) => {
-  //   e.target.style.background = "red";
-  // })
+function favToggle() {
+  let favBtn = document.querySelectorAll('.myFavBtn');
+  favBtn.forEach(btn => btn.addEventListener('click', (e) => {
+    
+    let selectedItem = foodArray[e.target.id - 1];
+    selectedItem.completed = !selectedItem.completed;
+
+    if(selectedItem.completed === true) {
+      console.log("eklendi")
+      favArray.push(selectedItem);
+      console.log(favArray);
+    } else {
+      let deletedFavItem = {}; 
+      favArray.forEach(food => {
+        if(food.id == selectedItem.id) {
+          console.log("eşleşti")
+          deletedFavItem = food;
+        }
+      });      
+      let index = favArray.indexOf(deletedFavItem);
+      favArray.splice(index, 1);
+      console.log(favArray);
+    }
+  }));
+};
+
+  async function renderApp() {
+    await loadFoodItems();
+
+    setAllFoodsNoFav();
+
+    createCards();
+
+    favToggle();
+    // console.log(foodArray);
+  }
+
+  renderApp();
