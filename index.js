@@ -21,6 +21,7 @@ fetch("https://jsonplaceholder.typicode.com/users/1").then(
         const foodCard = document.createElement('div');
         foodCard.innerHTML = food.title;
         foodCard.className = "foodCard";
+        foodCard.setAttribute('tabIndex', food.id)
 
         const favBtn = document.createElement('button');
         favBtn.setAttribute('id', food.id);
@@ -39,18 +40,31 @@ fetch("https://jsonplaceholder.typicode.com/users/1").then(
 
   loadFoodItems();
 
-  const foodBox = document.getElementsByClassName("food-box");
+  
+  // const foodBox = document.getElementsByClassName("food-box");
   // const foodCard = document.querySelector('.foodCard');
-  document.addEventListener('click', focusFoodCard);
-  document.addEventListener('mouseout', leaveFoodCard);
+  // document.addEventListener('click', focusFoodCard);
+  // document.addEventListener('blur', leaveFoodCard);
 
   // Focus to card Function
-  function focusFoodCard(e) {
-    if(e.target.className === "foodCard") {
-      e.target.classList.add("borderEffect", "bg-info");
-    }
-  };
-  // // Focus Out function
+  // function focusFoodCard(e) {
+  //   if(e.target.className === "foodCard") {
+  //     e.target.classList.add("borderEffect", "bg-info");
+  //     // e.target.focus();
+  //     // setTimeout( focusOut(), 2000);
+  //     // const allCards = document.querySelectorAll("div.foodCard, .bg-info");
+  //     // var i;
+  //     // for (i = 0; i < allCards.length; i++) {
+  //     // allCards[i].classList.remove("borderEffect", "bg-info");
+  //     // }
+  //   }
+  // };
+
+  // function focusOut(e) {
+  //   e.target.classList.remove("borderEffect", "bg-info");
+  //   console.log("2 sn geçti")
+  // };
+  //  Focus Out function
   // function leaveFoodCard(e) {
   //   if(e.target.classList.contains("borderEffect")) {
   //     e.target.classList.remove("borderEffect", "bg-info");
